@@ -1,3 +1,35 @@
+eMANDEVAL Future, version 4.4.1 (V18.1 interface patch)
+
+V18.1 is a user-interface and usability patch for the AI Policy Assistant. It
+does not change the scientific model or any calculation. The latent-class
+coefficients, class shares, class-share-weighted support formula, cost
+calculations, benefit-cost calculations, lives-saved calculations, saved-options
+logic and report calculations are all unchanged from V18 (4.4.0).
+
+What changed in V18.1:
+- Improved Policy Assistant layout, reduced visible quick prompts, enlarged
+  response area, improved response readability and improved mobile usability.
+- Only four primary quick buttons show on open (Explain result, Explain for
+  public, Draft briefing, Compare options). The other eight prompts moved into
+  a collapsible "More prompts" section (two columns on desktop, stacked on
+  mobile), collapsed by default.
+- The conversation/response area is now the dominant region of the panel,
+  scrolls independently, and long answers stay readable and never sit behind
+  the input or buttons.
+- One short privacy line stays visible; the longer privacy and help text moved
+  into a collapsible "About this assistant" section.
+- A clearer "Thinking" indicator shows while generating; quick buttons and Send
+  are disabled during generation to prevent duplicate requests; Stop still
+  cancels.
+- Cache-busting strings updated to v=18-1-ui in index.html.
+
+Backend, Worker endpoint, Gemini secret handling, /api/health, structured
+error messages, long-question handling, quota and rate-limit messages,
+toolState sending, Copy response, Add to report, Clear chat and Download
+transcript are all preserved from V18.
+
+----------------------------------------------------------------------
+
 eMANDEVAL Future, version 4.2.0
 A vaccine mandate decision aid for Australia, France and Italy.
 

@@ -1,4 +1,8 @@
-# Policy Assistant test cases (V18)
+# Policy Assistant test cases (V18.1)
+
+V18.1 is an interface patch: the chatbot layout was simplified (four primary
+quick buttons, the rest under "More prompts"), the response area enlarged, and
+mobile usability improved. Backend, model and error handling are unchanged.
 
 Run after deploying the Worker and pushing the frontend. The assistant must
 always use the live tool state and never invent numbers. Quick buttons must
@@ -62,3 +66,29 @@ behave exactly like typing the same prompt into the free-text box.
 23. Explains assumptions and limitations when relevant.
 24. Stays within Australia, France and Italy, or frames anything else as
     outside the model.
+
+## F. V18.1 layout patch
+25. Primary buttons only: on open, exactly four primary quick buttons are
+    visible (Explain result, Explain for public, Draft briefing, Compare
+    options). The other prompts are not visible until expanded.
+26. More prompts expands and collapses: clicking "More prompts" reveals the
+    eight secondary prompts in a two-column grid on desktop and a single
+    column on mobile, and collapses again smoothly. It is collapsed by default.
+27. Secondary prompts still work: each of the eight prompts under "More
+    prompts" sends a real request through the same pathway and renders an
+    answer.
+28. Response area is dominant and scrolls: the conversation area is the largest
+    region of the panel and scrolls independently. Long answers stay fully
+    readable and never disappear behind the prompts, input or footer.
+29. Input stays put: the input box, Send and Stop remain visible; the response
+    never overlaps them. On mobile the panel is a near full-screen sheet with a
+    large scrollable response area and a visible input.
+30. Controls lock while generating: quick buttons (primary and secondary) and
+    Send are disabled during generation, a "Thinking" indicator shows, and a
+    double-click does not send a duplicate request. Controls restore after the
+    response completes, errors, or is stopped.
+31. Same live tool state: a primary quick button, a secondary prompt and a
+    free-text question all send the same toolState to the same Worker URL and
+    render with the same formatting.
+32. Reduced clutter: only one short privacy line is visible; the longer
+    explanation sits under "About this assistant" and is collapsed by default.

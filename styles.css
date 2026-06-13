@@ -544,7 +544,7 @@ body.assistant-open .assistant-fab { opacity: 0; pointer-events: none; transform
 /* Panel: hidden off canvas by default, slides in when .is-open is added. */
 .assistant-panel {
   position: fixed; top: 0; right: 0; z-index: 220;
-  width: 410px; max-width: 100vw; height: 100vh; height: 100dvh;
+  width: 460px; max-width: 100vw; height: 100vh; height: 100dvh;
   background: var(--surface); border-left: 1px solid var(--line); box-shadow: var(--sh-3);
   display: flex; flex-direction: column; min-height: 0; font-family: var(--body);
   transform: translateX(105%); visibility: hidden;
@@ -554,10 +554,11 @@ body.assistant-open .assistant-fab { opacity: 0; pointer-events: none; transform
 .assistant-panel.is-open { transform: translateX(0); visibility: visible; }
 
 .assistant-head {
-  flex: none; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
+  flex: none; display: flex; flex-direction: column; gap: 8px;
   padding: 14px 16px 12px; background: var(--primary); color: #fff;
   padding-top: calc(14px + env(safe-area-inset-top, 0px));
 }
+.assistant-head-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .assistant-head-text { min-width: 0; }
 .assistant-head h2 { margin: 0; font-size: 1.06rem; font-family: var(--display); }
 .assistant-disclaimer { margin: 3px 0 0; font-size: .78rem; color: #CFE3DD; }
@@ -679,34 +680,74 @@ body[data-contrast="high"] .assistant-chip { border-width: 2px; }
    AI Policy Assistant - V18 additions (badges, help, stop, hint)
    ====================================================================== */
 .assistant-badges {
-  flex: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px 0;
-  background: var(--surface);
+  flex: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0;
+  background: transparent;
 }
 .abadge {
   display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px;
   border-radius: var(--r-pill); font-size: .72rem; font-weight: 600;
-  border: 1px solid var(--line-soft); color: var(--ink-soft); background: var(--surface-2);
+  border: 1px solid rgba(255,255,255,.28); color: #EAF4F0; background: rgba(255,255,255,.12);
 }
-.abadge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-faint); flex: none; }
-.abadge[data-state="on"] { color: var(--good); border-color: var(--good); background: var(--good-bg); }
-.abadge[data-state="on"] .abadge-dot { background: var(--good); }
-.abadge[data-state="warn"] { color: var(--warn); border-color: var(--warn); background: var(--warn-bg); }
-.abadge[data-state="warn"] .abadge-dot { background: var(--warn); }
-.abadge[data-state="off"] { opacity: .8; }
+.abadge-dot { width: 8px; height: 8px; border-radius: 50%; background: #CFE3DD; flex: none; }
+.abadge[data-state="on"] { color: #fff; border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.2); }
+.abadge[data-state="on"] .abadge-dot { background: #8FE3B0; }
+.abadge[data-state="warn"] { color: #fff; border-color: rgba(255,210,120,.7); background: rgba(255,190,80,.22); }
+.abadge[data-state="warn"] .abadge-dot { background: #FFC861; }
+.abadge[data-state="off"] { opacity: .72; }
 .abadge[data-state="checking"] .abadge-dot { animation: abadgePulse 1s ease-in-out infinite; }
 @keyframes abadgePulse { 0%,100% { opacity: .4; } 50% { opacity: 1; } }
 
-.assistant-help {
-  flex: none; margin: 8px 16px 0; border: 1px solid var(--line-soft); border-radius: var(--r-md);
-  background: var(--surface-2); font-size: .82rem;
+.assistant-intro {
+  flex: none; margin: 0; padding: 10px 16px; font-size: .85rem; color: var(--ink-soft);
+  background: var(--surface-2); border-bottom: 1px solid var(--line-soft);
 }
-.assistant-help > summary { padding: 8px 12px; cursor: pointer; font-weight: 600; color: var(--primary-strong); list-style: none; }
-.assistant-help > summary::-webkit-details-marker { display: none; }
-.assistant-help > summary::before { content: "?"; display: inline-grid; place-items: center; width: 16px; height: 16px; margin-right: 7px; border-radius: 50%; background: var(--primary); color: #fff; font-size: .7rem; }
-.assistant-help-body { padding: 0 12px 10px; color: var(--ink-soft); }
-.assistant-help-body ul { margin: 6px 0; padding-left: 18px; }
-.assistant-help-body li { margin: 3px 0; }
-.assistant-help-note { font-style: italic; color: var(--ink-faint); margin-top: 6px; }
+
+/* Conversation area is the dominant region: it grows to fill all space the
+   compact chrome leaves (about 55-65% on typical viewports). A modest pixel
+   floor keeps it comfortable without pushing the input off short screens. */
+.assistant-messages { flex: 1 1 auto; min-height: 200px; }
+
+/* V18.1 prompt cluster: four primary chips + collapsible More prompts. */
+.assistant-prompts {
+  flex: none; padding: 10px 16px 4px; border-top: 1px solid var(--line-soft); background: var(--surface);
+}
+.assistant-quick {
+  display: flex; flex-wrap: wrap; gap: 7px; padding: 0; border-top: none; background: transparent;
+}
+.assistant-chip-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+.assistant-chip-primary:hover { background: var(--primary-strong); border-color: var(--primary-strong); }
+
+.assistant-more { margin-top: 8px; border-top: 1px dashed var(--line-soft); }
+.assistant-more > summary {
+  padding: 8px 2px 4px; cursor: pointer; font-weight: 600; font-size: .8rem;
+  color: var(--primary-strong); list-style: none;
+}
+.assistant-more > summary::-webkit-details-marker { display: none; }
+.assistant-more > summary::before { content: "+"; display: inline-block; width: 14px; font-weight: 700; }
+.assistant-more[open] > summary::before { content: "\2212"; }
+.assistant-more-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 7px; padding: 4px 0 2px;
+}
+.assistant-more-grid .assistant-chip { text-align: left; }
+
+/* Short single privacy line + About disclosure near the foot. */
+.assistant-privacy {
+  flex: none; margin: 0; padding: 8px 16px; font-size: .74rem; color: var(--ink-faint);
+  background: var(--surface-2); border-top: 1px solid var(--line-soft); border-bottom: none;
+}
+.assistant-about {
+  flex: none; margin: 0; padding: 0 16px 8px; background: var(--surface-2); font-size: .78rem;
+}
+.assistant-about > summary { padding: 6px 0; cursor: pointer; font-weight: 600; color: var(--primary-strong); list-style: none; }
+.assistant-about > summary::-webkit-details-marker { display: none; }
+.assistant-about > summary::before { content: "\25B8"; display: inline-block; width: 14px; color: var(--ink-faint); }
+.assistant-about[open] > summary::before { content: "\25BE"; }
+.assistant-about-body { padding: 0 0 4px; color: var(--ink-soft); }
+.assistant-about-body p { margin: 4px 0; }
+
+/* Generating state: visible Thinking label and dimmed prompts. */
+.assistant-thinking-label { font-size: .8rem; color: var(--ink-faint); font-weight: 600; margin-left: 4px; }
+.assistant-panel.is-generating .assistant-prompts { opacity: .55; pointer-events: none; }
 
 .assistant-stop {
   flex: none; width: 42px; height: 42px; border: none; border-radius: var(--r-md);
@@ -720,10 +761,16 @@ body[data-contrast="high"] .assistant-chip { border-width: 2px; }
 .assistant-foot-btns { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 
 @media (max-width: 720px) {
-  .assistant-badges { padding-top: 8px; }
-  .assistant-help { margin-top: 6px; }
+  .assistant-badges { padding-top: 0; }
+  .assistant-messages { min-height: 120px; }
+  .assistant-more-grid { grid-template-columns: 1fr; }
+  body.assistant-open .assistant-fab { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .abadge[data-state="checking"] .abadge-dot { animation: none; }
 }
+
+body[data-contrast="high"] .abadge { border-width: 2px; }
+body[data-contrast="high"] .assistant-more,
+body[data-contrast="high"] .assistant-about > summary { border-width: 2px; }

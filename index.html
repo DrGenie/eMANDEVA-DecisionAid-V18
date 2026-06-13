@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=18-1" />
+  <link rel="stylesheet" href="styles.css?v=18-1-ui" />
 </head>
 <body data-text="m">
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -465,7 +465,7 @@
 
   <footer class="site-footer">
     <div class="wrap footer-inner">
-      <p><strong>eMANDEVAL Future</strong>, version 4.4.0. A decision support tool, not a substitute for legal, ethical or political judgement.</p>
+      <p><strong>eMANDEVAL Future</strong>, version 4.4.1. A decision support tool, not a substitute for legal, ethical or political judgement.</p>
       <p class="footer-soft">Estimates are based on stated preferences and simple cost benefit calculations. Check assumptions before any formal use.</p>
       <p class="footer-credit">Developed by Mesfin Genie, Newcastle Business School, University of Newcastle, Australia. Questions: <a href="mailto:mesfin.genie@newcastle.edu.au">mesfin.genie@newcastle.edu.au</a></p>
       <p class="footer-rights">&copy; <span id="footer-year">2026</span> Mesfin Genie. All rights reserved.</p>
@@ -528,62 +528,40 @@
 
   <div class="assistant-scrim" id="assistant-scrim"></div>
 
-  <aside class="assistant-panel" id="assistant-panel" role="dialog" aria-modal="false" aria-labelledby="assistant-title" aria-describedby="assistant-disclaimer" aria-hidden="true" inert>
+  <aside class="assistant-panel" id="assistant-panel" role="dialog" aria-modal="false" aria-labelledby="assistant-title" aria-describedby="assistant-intro" aria-hidden="true" inert>
     <header class="assistant-head">
-      <div class="assistant-head-text">
-        <h2 id="assistant-title">eMANDEVAL Policy Assistant</h2>
-        <p id="assistant-disclaimer" class="assistant-disclaimer">Interpretation support only. Not legal or medical advice.</p>
+      <div class="assistant-head-top">
+        <div class="assistant-head-text">
+          <h2 id="assistant-title">eMANDEVAL Policy Assistant</h2>
+        </div>
+        <div class="assistant-head-btns">
+          <button class="assistant-x" id="assistant-min" type="button" aria-label="Minimise the Policy Assistant" title="Minimise">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
+          </button>
+          <button class="assistant-x" id="assistant-close" type="button" aria-label="Close the Policy Assistant" title="Close">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
       </div>
-      <div class="assistant-head-btns">
-        <button class="assistant-x" id="assistant-min" type="button" aria-label="Minimise the Policy Assistant" title="Minimise">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/></svg>
-        </button>
-        <button class="assistant-x" id="assistant-close" type="button" aria-label="Close the Policy Assistant" title="Close">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
+      <div class="assistant-badges" id="assistant-badges" aria-label="Assistant status">
+        <span class="abadge" id="badge-backend" data-state="checking"><span class="abadge-dot"></span><span class="abadge-text">Checking backend</span></span>
+        <span class="abadge" id="badge-current" data-state="on"><span class="abadge-dot"></span><span class="abadge-text">Using current result</span></span>
+        <span class="abadge" id="badge-saved" data-state="off"><span class="abadge-dot"></span><span class="abadge-text">No saved options</span></span>
       </div>
     </header>
 
-    <div class="assistant-badges" id="assistant-badges" aria-label="Assistant status">
-      <span class="abadge" id="badge-backend" data-state="checking"><span class="abadge-dot"></span><span class="abadge-text">Checking backend</span></span>
-      <span class="abadge" id="badge-current" data-state="on"><span class="abadge-dot"></span><span class="abadge-text">Using current result</span></span>
-      <span class="abadge" id="badge-saved" data-state="off"><span class="abadge-dot"></span><span class="abadge-text">No saved options</span></span>
-    </div>
-
-    <p class="assistant-privacy" id="assistant-privacy">The Policy Assistant sends your question and the current tool settings to a free tier AI service to generate a response. Do not enter personal, confidential or sensitive information. Responses are interpretation support only and do not replace legal, medical, ethical or policy review.</p>
-
-    <details class="assistant-help" id="assistant-help">
-      <summary>What can I ask?</summary>
-      <div class="assistant-help-body">
-        <p>The assistant reads your live tool settings and result. Try questions like:</p>
-        <ul>
-          <li>What does this predicted support mean for policy?</li>
-          <li>Why is support higher under a severe outbreak?</li>
-          <li>Draft a short ministerial briefing note on this option.</li>
-          <li>Which saved option gives the best value for money?</li>
-          <li>What sensitivity checks should I run before using this?</li>
-        </ul>
-        <p class="assistant-help-note">You can ask a detailed question. Very long questions may be shortened automatically to fit the model context.</p>
-      </div>
-    </details>
+    <p class="assistant-intro" id="assistant-intro">Ask me to explain, compare or draft text using the current result.</p>
 
     <div class="assistant-messages" id="assistant-messages" role="log" aria-live="polite" aria-label="Conversation with the Policy Assistant"></div>
 
     <div class="assistant-toast" id="assistant-toast" role="status" aria-live="polite" hidden></div>
 
-    <div class="assistant-quick" id="assistant-quick" role="group" aria-label="Quick questions">
-      <button class="assistant-chip" type="button" data-action="explain_result">Explain current result</button>
-      <button class="assistant-chip" type="button" data-action="explain_public">Explain for the public</button>
-      <button class="assistant-chip" type="button" data-action="draft_briefing">Draft policy briefing</button>
-      <button class="assistant-chip" type="button" data-action="improve_support">Improve public support</button>
-      <button class="assistant-chip" type="button" data-action="identify_risks">Identify implementation risks</button>
-      <button class="assistant-chip" type="button" data-action="explain_lc">Explain the LC model</button>
-      <button class="assistant-chip" type="button" data-action="list_assumptions">Assumptions and limitations</button>
-      <button class="assistant-chip" type="button" data-action="compare_saved">Compare saved options</button>
-      <button class="assistant-chip" type="button" data-action="ministerial_note">Ministerial briefing note</button>
-      <button class="assistant-chip" type="button" data-action="one_slide">One-slide summary</button>
-      <button class="assistant-chip" type="button" data-action="stakeholder_questions">Stakeholder questions</button>
-      <button class="assistant-chip" type="button" data-action="sensitivity_checks">Sensitivity checks</button>
+    <div class="assistant-prompts" id="assistant-prompts">
+      <div class="assistant-quick" id="assistant-quick" role="group" aria-label="Quick questions"></div>
+      <details class="assistant-more" id="assistant-more">
+        <summary>More prompts</summary>
+        <div class="assistant-more-grid" id="assistant-more-grid" role="group" aria-label="More prompts"></div>
+      </details>
     </div>
 
     <form class="assistant-inputbar" id="assistant-form">
@@ -606,14 +584,23 @@
       <span class="assistant-count" id="assistant-count" aria-live="polite"></span>
     </div>
 
-    <p class="assistant-freetier">Domain-grounded AI on free tier services. Availability may be limited by provider quotas. If the assistant is unavailable, the decision aid calculations and report prompts remain usable.</p>
+    <p class="assistant-privacy" id="assistant-privacy">The assistant uses the current tool result. It does not see personal data or store API keys in the browser.</p>
+
+    <details class="assistant-about" id="assistant-about">
+      <summary>About this assistant</summary>
+      <div class="assistant-about-body">
+        <p>The Policy Assistant sends your question and the current tool settings to a free tier AI service to generate a response. Do not enter personal, confidential or sensitive information. Responses are interpretation support only and do not replace legal, medical, ethical or policy review.</p>
+        <p>It is domain-grounded, not fine-tuned: it uses the current tool state plus built-in eMANDEVAL guidance, and does not learn from your questions. Predicted support is stated-preference policy support, not actual uptake or compliance.</p>
+        <p>Availability may be limited by provider quotas. If the assistant is unavailable, the decision aid calculations and report prompts remain usable.</p>
+      </div>
+    </details>
   </aside>
 
   <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
   <p class="vis-hidden" id="live-results" aria-live="polite"></p>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
-  <script src="app.js?v=18-1"></script>
-  <script src="assistant.js?v=18-1"></script>
+  <script src="app.js?v=18-1-ui"></script>
+  <script src="assistant.js?v=18-1-ui"></script>
 </body>
 </html>

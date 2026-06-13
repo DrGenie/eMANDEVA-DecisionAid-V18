@@ -193,6 +193,47 @@ const ASSISTANT_QUICK_LABELS = {
   sensitivity_checks: 'Suggest sensitivity checks'
 };
 
+/* V18.1: short text shown on the quick-prompt buttons themselves. Distinct
+   from ASSISTANT_QUICK_LABELS (the chat bubble text). */
+const ASSISTANT_CHIP_LABELS = {
+  explain_result: 'Explain result',
+  explain_public: 'Explain for public',
+  draft_briefing: 'Draft briefing',
+  compare_saved: 'Compare options',
+  improve_support: 'Improve public support',
+  identify_risks: 'Identify implementation risks',
+  explain_lc: 'Explain LC model',
+  list_assumptions: 'Assumptions and limitations',
+  ministerial_note: 'Ministerial briefing note',
+  one_slide: 'One-slide summary',
+  stakeholder_questions: 'Stakeholder questions',
+  sensitivity_checks: 'Sensitivity checks'
+};
+
+/* V18.1: four primary actions visible on open; the rest live under
+   "More prompts". Every action still uses the identical send pathway. */
+const ASSISTANT_PRIMARY_ACTIONS = ['explain_result', 'explain_public', 'draft_briefing', 'compare_saved'];
+const ASSISTANT_SECONDARY_ACTIONS = ['improve_support', 'identify_risks', 'explain_lc', 'list_assumptions', 'ministerial_note', 'one_slide', 'stakeholder_questions', 'sensitivity_checks'];
+
+function buildQuickButtons() {
+  const mk = (action, cls) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = cls;
+    b.dataset.action = action;
+    b.textContent = ASSISTANT_CHIP_LABELS[action] || action;
+    return b;
+  };
+  const primary = AS('assistant-quick');
+  const grid = AS('assistant-more-grid');
+  if (primary && !primary.children.length) {
+    ASSISTANT_PRIMARY_ACTIONS.forEach(a => primary.appendChild(mk(a, 'assistant-chip assistant-chip-primary')));
+  }
+  if (grid && !grid.children.length) {
+    ASSISTANT_SECONDARY_ACTIONS.forEach(a => grid.appendChild(mk(a, 'assistant-chip')));
+  }
+}
+
 /* Map a backend error code to a clear, user friendly message. */
 const ASSISTANT_ERROR_MESSAGES = {
   RATE_LIMITED: 'The AI service has reached a temporary request limit. Please wait about 30 to 60 seconds and try again. The decision aid calculations are still available.',
@@ -381,6 +422,7 @@ function assistantEls() {
     form: AS('assistant-form'), input: AS('assistant-input'), send: AS('assistant-send'),
     stop: AS('assistant-stop'), clear: AS('assistant-clear'), download: AS('assistant-download'),
     count: AS('assistant-count'), quick: AS('assistant-quick'), toast: AS('assistant-toast'),
+    prompts: AS('assistant-prompts'), moreGrid: AS('assistant-more-grid'),
     badgeBackend: AS('badge-backend'), badgeCurrent: AS('badge-current'), badgeSaved: AS('badge-saved')
   };
 }
@@ -532,7 +574,7 @@ function showTyping() {
   const wrap = document.createElement('div');
   wrap.className = 'assistant-msg msg-assistant assistant-typing';
   wrap.id = 'assistant-typing';
-  wrap.innerHTML = '<div class="assistant-bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
+  wrap.innerHTML = '<div class="assistant-bubble assistant-thinking"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="assistant-thinking-label">Thinking\u2026</span></div>';
   els.messages.appendChild(wrap);
   els.messages.scrollTop = els.messages.scrollHeight;
 }
@@ -557,7 +599,10 @@ function setBusy(b) {
   els.send.disabled = b || assistant.userMessages >= ASSISTANT_SESSION_LIMIT;
   els.send.hidden = !!b;
   if (els.stop) els.stop.hidden = !b;
-  els.quick.querySelectorAll('button').forEach(btn => btn.disabled = b);
+  /* Disable every quick prompt (primary + More prompts) while generating. */
+  const scope = els.prompts || els.quick;
+  if (scope) scope.querySelectorAll('button').forEach(btn => { btn.disabled = b; });
+  if (els.panel) els.panel.classList.toggle('is-generating', !!b);
 }
 
 /* Status badges: backend connection, using current result, saved options. */
@@ -742,6 +787,8 @@ function initAssistant() {
   if (!els.fab || !els.panel) return;   /* assistant markup absent: do nothing */
   _assistantInited = true;
 
+  buildQuickButtons();   /* V18.1: render primary + More prompts buttons */
+
   els.fab.addEventListener('click', () => { assistant.open ? closeAssistant() : openAssistant(); });
   els.close.addEventListener('click', closeAssistant);
   if (els.min) els.min.addEventListener('click', closeAssistant);
@@ -765,7 +812,7 @@ function initAssistant() {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); els.form.requestSubmit ? els.form.requestSubmit() : els.form.dispatchEvent(new Event('submit', { cancelable: true })); }
   });
 
-  els.quick.addEventListener('click', e => {
+  (els.prompts || els.quick).addEventListener('click', e => {
     const btn = e.target.closest('[data-action]');
     if (!btn) return;
     if (assistant.busy) return;                /* one request per click */
